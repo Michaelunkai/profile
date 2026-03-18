@@ -1,0 +1,129 @@
+
+reorder:
+1)updates + nvidia drivers + profile.txt + in ps1: allow scripting, enable and setup wsl2, reboot
+2)check updates + disable firewall + dcontrol + setup and run cracked booster pro + winget one liner setup, updates and  reboot
+3)updates + create folders in c drive + restore with docker desktop: profile, windowsapps, wsl and study > dkill + functions + pip install  
+
+1)updates + copy nvidia to install folder  + open latest profile.txt and run in powershell:
+
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned; New-Item -Path $PROFILE -ItemType File -Force; notepad $PROFILE; Start-Process -FilePath "C:\backup\windowsapps\install\nvidia\NVIDIA_app_v11.0.1.189.exe" -ArgumentList "/silent", "/noreboot" -Wait -NoNewWindow; dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart; dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart; wsl --set-default-version 2; wsl --update; Install-Module PSWindowsUpdate -Force; Import-Module PSWindowsUpdate; Get-WindowsUpdate; Install-WindowsUpdate -AcceptAll -Confirm; Restart-Computer -Force -Confirm:$false
+
+2) reboot > check updates + disable firewall + dcontrol + setup and run cracked booster pro + run this in powershell:
+
+if(winget list --id=Microsoft.OneDrive -e|Select-String "Microsoft.OneDrive"){winget uninstall --id=Microsoft.OneDrive -e --all-versions --silent; while(winget list --id=Microsoft.OneDrive -e|Select-String "Microsoft.OneDrive"){Start-Sleep -Seconds 2}}; if(winget list --id=Microsoft.Edge -e|Select-String "Microsoft.Edge"){try{winget uninstall --id=Microsoft.Edge -e --all-versions --silent}catch{Write-Host "Microsoft Edge uninstall failed, continuing..."}}; function Create-Shortcut($target,$shortcutPath,$workingDirectory=(Split-Path $target)){ $wsh=New-Object -ComObject WScript.Shell; $sc=$wsh.CreateShortcut($shortcutPath); $sc.TargetPath=$target; $sc.WorkingDirectory=$workingDirectory; $sc.IconLocation=$target; $sc.Save()}; function Install-App($id,$dn,$target,$createShortcut=$true,$skip=$false){ if(-not $skip -and (winget list --id=$id -e|Select-String $id)){ winget uninstall --id=$id -e --all-versions --silent; while(winget list --id=$id -e|Select-String $id){Start-Sleep -Seconds 2}}; try{ if(-not $skip -or -not(winget list --id=$id -e|Select-String $id)){ winget install --id=$id -e --accept-package-agreements --accept-source-agreements --silent}}catch{ Write-Host "$id installation failed: $_"}; Start-Sleep -Seconds 5; if($createShortcut){ $before=Get-ChildItem "C:\ProgramData\Microsoft\Windows\Start Menu\Programs","$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Filter "*.lnk" | Select-Object -ExpandProperty FullName; $after=Get-ChildItem "C:\ProgramData\Microsoft\Windows\Start Menu\Programs","$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Filter "*.lnk" | Select-Object -ExpandProperty FullName; $new=$after | Where-Object { $before -notcontains $_ }; if($new.Count -gt 1){ $new=$new | Sort-Object { (Get-Item $_).CreationTime } | Select-Object -Last 1}; if($new.Count -eq 1){ Remove-Item "$env:USERPROFILE\Desktop\$dn.lnk" -ErrorAction SilentlyContinue; Copy-Item $new[0] "$env:USERPROFILE\Desktop\$dn.lnk" -Force}else{ Create-Shortcut $target "$env:USERPROFILE\Desktop\$dn.lnk"}}}; Install-App "Google.Chrome" "Chrome" "C:\Program Files\Google\Chrome\Application\chrome.exe"; Install-App "qBittorrent.qBittorrent" "qBittorrent" "C:\Program Files\qBittorrent\qbittorrent.exe"; Install-App "Doist.Todoist" "Todoist" "C:\Program Files\Todoist\Todoist.exe"; Install-App "Asus.ArmouryCrate" "ArmouryCrate" "C:\Program Files\ASUS\ArmouryCrate\ArmouryCrate.exe"; Install-App "9WZDNCRDK3WP" "Slack" "C:\Users\$env:USERNAME\AppData\Local\slack\slack.exe"; Install-App "Discord.Discord" "Discord" "C:\Users\$env:USERNAME\AppData\Local\Discord\Update.exe"; Install-App "Wagnardsoft.DisplayDriverUninstaller" "DisplayDriverUninstaller" "C:\Program Files\Wagnardsoft\DisplayDriverUninstaller\DisplayDriverUninstaller.exe"; if(!(winget list --id=terminal -e|Select-String "terminal")){ Install-App "terminal" "Terminal" "C:\Users\$env:USERNAME\AppData\Local\Microsoft\WindowsApps\wt.exe" $true $true}; Install-App "Docker.DockerDesktop" "DockerDesktop" "C:\Program Files\Docker\Docker\Docker Desktop.exe"; Install-App "9NKSQGP7F2NH" "WhatsApp" "C:\Users\$env:USERNAME\AppData\Local\WhatsApp\WhatsApp.exe"; Install-App "Parsec.Parsec" "Parsec" "C:\Program Files\Parsec\parsec.exe"; Install-App "Python.Python.3.13" "Python3" "C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python310\python.exe" $false; Install-App "Piriform.CCleaner" "CCleaner" "C:\Program Files\CCleaner\CCleaner.exe"; Install-App "Valve.Steam" "Steam" "C:\Program Files (x86)\Steam\Steam.exe"; Install-App "JTKsoftware.JoyToKey" "JoyToKey" "C:\Program Files (x86)\JoyToKey\JoyToKey.exe"; Install-App "Microsoft.VisualStudioCode" "VSCode" "C:\Users\$env:USERNAME\AppData\Local\Programs\Microsoft VS Code\Code.exe"; Install-App "Stremio.Stremio" "Stremio" "C:\Program Files\Stremio\Stremio.exe"; Install-App "Mozilla.Firefox" "Firefox" "C:\Program Files\Mozilla Firefox\firefox.exe"; Install-App "Estmob.SendAnywhere" "SendAnywhere" "C:\Program Files\Send Anywhere\SendAnywhere.exe"; Install-App "voidtools.Everything" "Everything" "C:\Program Files\Everything\Everything.exe"; Install-App "OBSProject.OBSStudio" "OBSStudio" "C:\Program Files\obs-studio\bin\64bit\obs64.exe"; Install-App "Spotify.Spotify" "Spotify" "C:\Users\$env:USERNAME\AppData\Roaming\Spotify\Spotify.exe"; Install-App "YouTubeMusic.YouTubeMusic" "YouTubeMusic" "C:\Program Files\YouTube Music\YouTube Music.exe"; Install-App "Microsoft.DirectX" "DirectX" "C:\Windows\System32\dxdiag.exe" $false; Install-App "Microsoft.VCRedist.2015+.x86" "VCRedist2015_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2015+.x64" "VCRedist2015_x64" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2013.x86" "VCRedist2013_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2013.x64" "VCRedist2013_x64" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2012.x86" "VCRedist2012_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2012.x64" "VCRedist2012_x64" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2010.x86" "VCRedist2010_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2010.x64" "VCRedist2010_x64" "C:\Windows\System32\msvcr120.dll" $false; winget install -e --id GNU.Nano; clear; winget list;  Import-Module PSWindowsUpdate; Get-WindowsUpdate; Install-WindowsUpdate -AcceptAll -Confirm; Restart-Computer -Force -Confirm:$false
+
+
+3)
+updates + im powershell:
+mkdir "C:\backup\windowsapps\profile" && mkdir "C:\backup\Linux\wsl" && mkdir "C:\study"; docker run --rm -v C:\:/c -it michadockermisha/backup:profile sh -c "cp -r /home/* /c/backup/windowsapps/profile"; docker run --rm -v C:\:/c -it michadockermisha/backup:windowsapps sh -c "cp -r /home/* /c/backup/windowsapps"; docker run --rm -v C:\:/c -it michadockermisha/backup:wsl sh -c "apk add rsync; rsync -av /home/* /c/backup/Linux/wsl"; docker run --rm -v C:\:/c -it michadockermisha/backup:study sh -c "cp -r /home/* /c/study";  docker stop (docker ps -aq) -ErrorAction SilentlyContinue; docker rm (docker ps -aq) -ErrorAction SilentlyContinue; docker rmi (docker images -q) -ErrorAction SilentlyContinue; docker system prune -a --volumes --force; docker network prune --force; fixtime; cctemp; dislock; g1337x; rewsl; rmgamebar; startup; qaccess; python.exe -m pip install --upgrade pip; pip install requests pandas pyqt5 howlongtobeatpy bs4 pyautogui pillow google_auth_oauthlib google-api-python-client dotenv matplotlib paramiko statsmodels scikit-learn seaborn wordninja
+
+
+
+
+
+_______________________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+
+order)
+1)updates + nvidia drivers +  wsl2 in powershell + enable scriptcopy profile + create folders in c
+>reboot
+2)updates + winget liner + terminal > settings > dafult > run always as admin
+>reboot
+3)updates + docker desktop one liner + all functions + pip install + add media source + win+cntrl hotkey to obs> add shortcut in joy 
+
+
+
+
+
+
+
+1)**check for updates
+2) powershell:
+Start-Process -FilePath "C:\backup\windowsapps\install\nvidia\NVIDIA_app_v11.0.1.189.exe" -ArgumentList "/silent", "/noreboot" -Wait -NoNewWindow; dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart; dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart; wsl --set-default-version 2; wsl --update
+3) copy latest profile to notepad $profile and run . $profile than profile
+4)*create backup/Linux/wsl and backup/windowsapps and study and wsl2/ubuntu wsl2/ubuntu2 in c drive
+
+
+*)reboot
+
+5)
+*check for updates
+
+6)in powershell:
+
+
+
+
+reboot
+
+7)
+
+docker run --rm -v C:\:/c -it michadockermisha/backup:windowsapps sh -c "cp -r /home/* /c/backup/windowsapps" && docker run --rm -v C:\:/c -it michadockermisha/backup:wsl sh -c "apk add rsync && rsync -av /home/* /c/backup/Linux/wsl" && docker run --rm -v C:\:/c -it michadockermisha/backup:study sh -c "cp -r /home/* /c/study" && dkill; fixtime; cctemp; dislock; g1337x; rewsl; rmgamebar; startup; qaccess; python.exe -m pip install --upgrade pip; python.exe -m pip install --upgrade pip; pip install requests pandas pyqt5 howlongtobeatpy bs4 pyautogui pillow google_auth_oauthlib google-api-python-client dotenv matplotlib
+
+
+
+
+
+
+
+
+
+
+
+
+
+___________________________________________________________________________
+*wsl:
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart && dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart && wsl --set-default-version 2 && wsl --update
+___________________________________________________________________________________________________________
+run with docker desktop:
+
+mkdir "C:\backup\windowsapps\profile" && mkdir "C:\backup\Linux\wsl" && mkdir "C:\study"; docker run --rm -v C:\:/c -it michadockermisha/backup:profile sh -c "cp -r /home/* /c/backup/windowsapps/profile"; docker run --rm -v C:\:/c -it michadockermisha/backup:windowsapps sh -c "cp -r /home/* /c/backup/windowsapps"; docker run --rm -v C:\:/c -it michadockermisha/backup:wsl sh -c "apk add rsync; rsync -av /home/* /c/backup/Linux/wsl"; docker run --rm -v C:\:/c -it michadockermisha/backup:study sh -c "cp -r /home/* /c/study";  docker stop (docker ps -aq) -ErrorAction SilentlyContinue; docker rm (docker ps -aq) -ErrorAction SilentlyContinue; docker rmi (docker images -q) -ErrorAction SilentlyContinue; docker system prune -a --volumes --force; docker network prune --force
+
+
+
+
+
+___________________________________________________________________________________________________________
+winget       -         slack, armorycrate, terminal, docker desktop, whatsapp, python3, choco, ccleaner, wavebox, steam, wemod, JoyToKey, vscode, BCUninstaller, streamio, Send Anywhere, firefox, fxsound, autohotkey, Wise Disk Cleaner, Everything, , iobit unlocker, speedtest cli, autologon, process lasso, BleachBit, superf4, obs-studio, spotify, youtube music, directx, VCRedist(all years), ddu :
+
+
+
+
+if(winget list --id=Microsoft.OneDrive -e|Select-String "Microsoft.OneDrive"){winget uninstall --id=Microsoft.OneDrive -e --all-versions --silent; while(winget list --id=Microsoft.OneDrive -e|Select-String "Microsoft.OneDrive"){Start-Sleep -Seconds 2}}; if(winget list --id=Microsoft.Edge -e|Select-String "Microsoft.Edge"){try{winget uninstall --id=Microsoft.Edge -e --all-versions --silent}catch{Write-Host "Microsoft Edge uninstall failed, continuing..."}}; function Create-Shortcut($target,$shortcutPath,$workingDirectory=(Split-Path $target)){ $wsh=New-Object -ComObject WScript.Shell; $sc=$wsh.CreateShortcut($shortcutPath); $sc.TargetPath=$target; $sc.WorkingDirectory=$workingDirectory; $sc.IconLocation=$target; $sc.Save()}; function Install-App($id,$dn,$target,$createShortcut=$true,$skip=$false){ if(-not $skip -and (winget list --id=$id -e|Select-String $id)){ winget uninstall --id=$id -e --all-versions --silent; while(winget list --id=$id -e|Select-String $id){Start-Sleep -Seconds 2}}; try{ if(-not $skip -or -not(winget list --id=$id -e|Select-String $id)){ winget install --id=$id -e --accept-package-agreements --accept-source-agreements --silent}}catch{ Write-Host "$id installation failed: $_"}; Start-Sleep -Seconds 5; if($createShortcut){ $before=Get-ChildItem "C:\ProgramData\Microsoft\Windows\Start Menu\Programs","$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Filter "*.lnk" | Select-Object -ExpandProperty FullName; $after=Get-ChildItem "C:\ProgramData\Microsoft\Windows\Start Menu\Programs","$env:APPDATA\Microsoft\Windows\Start Menu\Programs" -Filter "*.lnk" | Select-Object -ExpandProperty FullName; $new=$after | Where-Object { $before -notcontains $_ }; if($new.Count -gt 1){ $new=$new | Sort-Object { (Get-Item $_).CreationTime } | Select-Object -Last 1}; if($new.Count -eq 1){ Remove-Item "$env:USERPROFILE\Desktop\$dn.lnk" -ErrorAction SilentlyContinue; Copy-Item $new[0] "$env:USERPROFILE\Desktop\$dn.lnk" -Force}else{ Create-Shortcut $target "$env:USERPROFILE\Desktop\$dn.lnk"}}}; Install-App "Google.Chrome" "Chrome" "C:\Program Files\Google\Chrome\Application\chrome.exe"; Install-App "qBittorrent.qBittorrent" "qBittorrent" "C:\Program Files\qBittorrent\qbittorrent.exe"; Install-App "Doist.Todoist" "Todoist" "C:\Program Files\Todoist\Todoist.exe"; Install-App "Asus.ArmouryCrate" "ArmouryCrate" "C:\Program Files\ASUS\ArmouryCrate\ArmouryCrate.exe"; Install-App "9WZDNCRDK3WP" "Slack" "C:\Users\$env:USERNAME\AppData\Local\slack\slack.exe"; Install-App "Discord.Discord" "Discord" "C:\Users\$env:USERNAME\AppData\Local\Discord\Update.exe"; Install-App "Wagnardsoft.DisplayDriverUninstaller" "DisplayDriverUninstaller" "C:\Program Files\Wagnardsoft\DisplayDriverUninstaller\DisplayDriverUninstaller.exe"; if(!(winget list --id=terminal -e|Select-String "terminal")){ Install-App "terminal" "Terminal" "C:\Users\$env:USERNAME\AppData\Local\Microsoft\WindowsApps\wt.exe" $true $true}; Install-App "Docker.DockerDesktop" "DockerDesktop" "C:\Program Files\Docker\Docker\Docker Desktop.exe"; Install-App "9NKSQGP7F2NH" "WhatsApp" "C:\Users\$env:USERNAME\AppData\Local\WhatsApp\WhatsApp.exe"; Install-App "Parsec.Parsec" "Parsec" "C:\Program Files\Parsec\parsec.exe"; Install-App "Python.Python.3.13" "Python3" "C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python310\python.exe" $false; Install-App "Piriform.CCleaner" "CCleaner" "C:\Program Files\CCleaner\CCleaner.exe"; Install-App "Valve.Steam" "Steam" "C:\Program Files (x86)\Steam\Steam.exe"; Install-App "JTKsoftware.JoyToKey" "JoyToKey" "C:\Program Files (x86)\JoyToKey\JoyToKey.exe"; Install-App "Microsoft.VisualStudioCode" "VSCode" "C:\Users\$env:USERNAME\AppData\Local\Programs\Microsoft VS Code\Code.exe"; Install-App "Stremio.Stremio" "Stremio" "C:\Program Files\Stremio\Stremio.exe"; Install-App "Mozilla.Firefox" "Firefox" "C:\Program Files\Mozilla Firefox\firefox.exe"; Install-App "Estmob.SendAnywhere" "SendAnywhere" "C:\Program Files\Send Anywhere\SendAnywhere.exe"; Install-App "voidtools.Everything" "Everything" "C:\Program Files\Everything\Everything.exe"; Install-App "OBSProject.OBSStudio" "OBSStudio" "C:\Program Files\obs-studio\bin\64bit\obs64.exe"; Install-App "Spotify.Spotify" "Spotify" "C:\Users\$env:USERNAME\AppData\Roaming\Spotify\Spotify.exe"; Install-App "YouTubeMusic.YouTubeMusic" "YouTubeMusic" "C:\Program Files\YouTube Music\YouTube Music.exe"; Install-App "Microsoft.DirectX" "DirectX" "C:\Windows\System32\dxdiag.exe" $false; Install-App "Microsoft.VCRedist.2015+.x86" "VCRedist2015_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2015+.x64" "VCRedist2015_x64" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2013.x86" "VCRedist2013_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2013.x64" "VCRedist2013_x64" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2012.x86" "VCRedist2012_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2012.x64" "VCRedist2012_x64" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2010.x86" "VCRedist2010_x86" "C:\Windows\System32\msvcr120.dll" $false; Install-App "Microsoft.VCRedist.2010.x64" "VCRedist2010_x64" "C:\Windows\System32\msvcr120.dll" $false; winget install -e --id GNU.Nano; clear; winget list
+
+
+
+
+
+__________________________________________________________________________________________________________________
+
+
+
+pip:
+
+python.exe -m pip install --upgrade pip; pip install requests pandas pyqt5 howlongtobeatpy bs4 pyautogui pillow google_auth_oauthlib google-api-python-client dotenv matplotlib paramiko statsmodels scikit-learn seaborn wordninja pyfiglet selenium webdriver-manager
+
+_______________________________________________________________________________________________________________
+
+
+
+functions:
+fixtime
+cctemp
+dislock
+g1337x
+rewsl
+rmgamebar
+startup
+qaccess
+uac
+

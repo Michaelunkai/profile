@@ -1,0 +1,9 @@
+﻿Thumbs.db
+.DS_Store
+**/nul
+**/.git
+**/mem-agent-mcp/
+
+# Auto-excluded files with secrets
+profile.txt
+kk.txt

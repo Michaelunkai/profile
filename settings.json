@@ -1,0 +1,166 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions":
+    [
+        {
+            "command":
+            {
+                "action": "splitPane",
+                "split": "right"
+            },
+            "keys": "shift+z"
+        },
+        {
+            "command": "closePane",
+            "keys": "shift+d"
+        },
+        {
+            "command":
+            {
+                "action": "splitPane",
+                "split": "down"
+            },
+            "keys": "shift+vk(20)"
+        },
+        {
+            "command": "copy",
+            "keys": "ctrl+c"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"
+        },
+        {
+            "command": "find",
+            "keys": "ctrl+shift+f"
+        },
+        {
+            "command":
+            {
+                "action": "splitPane",
+                "split": "auto"
+            },
+            "keys": "alt+shift+d"
+        }
+    ],
+    "copyFormatting": "none",
+    "copyOnSelect": false,
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "newTabMenu": 
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
+    "profiles": 
+    {
+        "defaults": 
+        {
+            "elevate": true,
+            "startingDirectory": "F:\\Downloads"
+        },
+        "list": 
+        [
+            {
+                "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Command Prompt"
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
+                "hidden": false,
+                "name": "PowerShell",
+                "source": "Windows.Terminal.PowershellCore"
+            },
+            {
+                "guid": "{75def201-4efb-5e32-93a0-c5647120c025}",
+                "hidden": true,
+                "name": "ubuntu",
+                "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "guid": "{5bad979e-e257-53d7-b947-17e6f0c3c95b}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{13c83cdf-fbf1-5e11-9a8c-e798484882bd}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{cfec1943-1980-509d-b5ca-9a9cb87e8341}",
+                "hidden": false,
+                "name": "ubuntu2",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{ef083f52-2464-5773-9d21-9cacd5495370}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{b1799fa1-b152-5762-84fe-821c26c0a1c4}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{4098261b-7fc8-5694-bac3-dc7b52f7ba77}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{e5ceb53e-5ab7-5fc8-bdc6-56c8d45fe496}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{3acc76be-4be1-5ce8-93f5-1819214f38ec}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{160e786d-695b-591c-9161-1125121b646d}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{6b6a81d8-36bf-5d97-ac8f-1caa087a1e36}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            },
+            {
+                "guid": "{cdefb472-ea51-55ae-a1e2-c21f3f47a114}",
+                "hidden": false,
+                "name": "ubuntu",
+                "source": "Microsoft.WSL"
+            }
+        ]
+    },
+    "schemes": [],
+    "themes": [],
+    "windowingBehavior": "useAnyExisting"
+}
